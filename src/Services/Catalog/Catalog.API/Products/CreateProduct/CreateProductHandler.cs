@@ -1,4 +1,12 @@
-﻿
+using BuildingBlocks.CQRS;
+using Catalog.API.Models;
+using MediatR;
+using Marten;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Catalog.API.Products.CreateProduct
 {
     // Command definition
@@ -9,28 +17,22 @@ namespace Catalog.API.Products.CreateProduct
     public record CreateProductResult(Guid Id);
 
     // Command handler implementation
-    internal class CreateProductCommandHandler(IDocumentSession sesstion)
+    internal class CreateProductCommandHandler(IDocumentSession session)
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
-        // This method will handle the command
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-
-            // For the sake of this example, assume the product is created and we return the new product Id
-            // In real scenarios, you would save the product in a database
-
             var product = new Product
             {
                 Name = command.Name,
                 Categories = command.Category,
                 Description = command.Description,
                 ImageFile = command.ImageFile,
-                Price = command.Price,
-
+                Price = command.Price
             };
-            //save to database
-            sesstion.Store(product);
-            await sesstion.SaveChangesAsync(cancellationToken);
+
+            session.Store(product);
+            await session.SaveChangesAsync(cancellationToken);
 
             return new CreateProductResult(product.Id);
         }

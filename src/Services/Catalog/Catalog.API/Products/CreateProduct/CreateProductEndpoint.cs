@@ -1,5 +1,4 @@
-﻿
-public record CreateProductRequest(string Name, List<string> Category, string Description,string ImageFile, decimal Price);
+﻿public record CreateProductRequest(string Name, List<string> Category, string Description, string ImageFile, decimal Price);
 public record CreateProductResponse(Guid Id);
 
 namespace Catalog.API.Products.CreateProduct
@@ -22,8 +21,6 @@ namespace Catalog.API.Products.CreateProduct
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create a new product")
             .WithDescription("Create Product.");
-
-
         }
     }
 }
