@@ -1,7 +1,7 @@
 ﻿
 namespace Catalog.API.Products.GetProducts
 {
-    public record GetProductsResponse(IEnumerable<Product> Products);
+    public record GetProductsResponse(IEnumerable<Product> products);
     public class GetProductsEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
@@ -9,8 +9,8 @@ namespace Catalog.API.Products.GetProducts
             app.MapGet("/products", async (ISender sender) =>
             {
                 var result = await sender.Send(new GetProductsQuery());
-                var respone = result.Adapt<GetProductsResponse>();
-                return Results.Ok(respone);
+                var response = new GetProductsResponse(result.products);
+                return Results.Ok(response);
             })
                 .WithName("GetProducts")
                 .Produces<GetProductsResponse>(StatusCodes.Status200OK)
