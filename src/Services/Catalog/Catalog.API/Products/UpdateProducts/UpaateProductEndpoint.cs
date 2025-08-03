@@ -7,14 +7,19 @@ namespace Catalog.API.Products.UpdateProducts
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("/products", async (UpdateProductRequest request, ISender sender) =>
+            app.MapPut("/products/{id:guid}", async (
+                   Guid id,
+                   UpdateProductRequest body,
+                   ISender sender) =>
             {
-                var command = request.Adapt<UpdateProductCommand>();
+                var command = new UpdateProductCommand(
+                    id, body.Name, body.Category,
+                    body.Description, body.ImageFile, body.Price);
+
                 var result = await sender.Send(command);
-                var response = new UpdateProductResponse(result.IsSuccess);
-                return Results.Ok(response);
+                return Results.Ok(new UpdateProductResponse(result.IsSuccess));
             })
-                .WithName("UpdateProduct")
+               .WithName("UpdateProduct")
                 .Produces<UpdateProductResponse>()
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .ProducesProblem(StatusCodes.Status404NotFound)

@@ -5,6 +5,18 @@ namespace Catalog.API.Products.UpdateProducts
     public record UpdateProductCommand(Guid Id, string Name, List<string> Category, string Description,string ImageFile, decimal Price)
         :ICommand<UpdateProductResult>;
     public record UpdateProductResult(bool IsSuccess);
+    public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+    {
+        public UpdateProductCommandValidator()
+        {
+            RuleFor(command => command.Id).NotEmpty().WithMessage("Product Id is Required");
+            RuleFor(command => command.Name).NotEmpty().WithMessage("Product name is required.");
+            RuleFor(command => command.Category).NotEmpty().WithMessage("At least one category is required.");
+            RuleFor(command => command.Description).NotEmpty().WithMessage("Product description is required.");
+            RuleFor(command => command.ImageFile).NotEmpty().WithMessage("Image file is required.");
+            RuleFor(command => command.Price).GreaterThan(0).WithMessage("Price must be greater than zero.");
+        }
+    }
     public class UpdateProductHandler 
         (IDocumentSession session, ILogger<UpdateProductHandler> logger)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>
@@ -13,7 +25,7 @@ namespace Catalog.API.Products.UpdateProducts
         {
             logger.LogInformation("UpdateProductHandler called with command: {@Command}", command);
             var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
-            if (product is not null)
+            if (product is null)
             {
                 logger.LogWarning("Product with ID {Id} not found", command.Id);
                 return new UpdateProductResult(false);

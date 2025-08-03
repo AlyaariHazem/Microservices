@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Products.GetProducts
+﻿using Catalog.API.Exception;
+
+namespace Catalog.API.Products.GetProducts
 {
     public record GetProductsQuery():IQuery<GetProductsResult>;
     public record GetProductsResult(IEnumerable<Product> products);
@@ -10,6 +12,7 @@
         {
             logger.LogInformation("Get Products");
             var products = await session.Query<Product>().ToListAsync(cancellationToken);
+            
             return new GetProductsResult(products);
         }
     }

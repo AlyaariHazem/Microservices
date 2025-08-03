@@ -1,4 +1,7 @@
 ﻿
+using Catalog.API.Exception;
+using Catalog.API.Models;
+
 namespace CatalogAPI.Products.DeleteProduct
 {
     public record DeleteProductCommand(Guid Id) : ICommand<DeleteProductResult>;
@@ -20,7 +23,7 @@ namespace CatalogAPI.Products.DeleteProduct
             var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
             if (product is null)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                throw new ProductNotFoundException(command.Id);
             }
             session.Delete<Product>(command.Id);
             await session.SaveChangesAsync();
