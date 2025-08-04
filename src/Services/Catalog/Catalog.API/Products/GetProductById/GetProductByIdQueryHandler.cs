@@ -18,15 +18,13 @@ namespace Catalog.API.Products.GetProductById
     }
     // ───────── Handler ─────────────────────────────────────────────────────
     internal class GetProductByIdQueryHandler(
-        IDocumentSession session,
-        ILogger<GetProductByIdQueryHandler> logger)
+        IDocumentSession session)
         : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
     {
         public async Task<GetProductByIdResult> Handle(
             GetProductByIdQuery query,
             CancellationToken cancellationToken)
         {
-            logger.LogInformation("Get product by Id: {Id}", query.Id);
 
             var product = await session.LoadAsync<Product>(query.Id, cancellationToken);
 
