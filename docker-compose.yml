@@ -9,5 +9,12 @@ services:
       context: .
       dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
 
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Basket.API/Dockerfile
+
 volumes:
   postgres_catalog:    
+

@@ -5,4 +5,6 @@ global using Basket.API.Models;
 global using Marten;
 global using FluentValidation;
 global using Basket.API.Data;
-global using Marten.Schema;
+global using BuildingBlocks.CQRS;
+global using Microsoft.Extensions.Caching.Distributed;
+global using System.Text.Json;
