@@ -7,6 +7,7 @@ package discount;
 // The discount service definition.
 service DiscountProtoService {
   // Discount CRUD Operations
+  rpc GetAllDiscounts(GetAllDiscountsRequest) returns (GetAllDiscountsResponse);
   rpc GetDiscount   (GetDiscountRequest)   returns (CouponModel);
   rpc CreateDiscount(CreateDiscountRequest) returns (CouponModel);
   rpc UpdateDiscount(UpdateDiscountRequest) returns (CouponModel);
@@ -19,6 +20,8 @@ service DiscountProtoService {
 message GetDiscountRequest {
   string productName = 1;
 }
+//get all
+message GetAllDiscountsRequest {}
 
 // Coupon/discount entity
 message CouponModel {
@@ -32,6 +35,8 @@ message CouponModel {
 message CreateDiscountRequest {
   CouponModel coupon = 1;
 }
+
+message GetAllDiscountsResponse { repeated CouponModel coupons = 1; }
 
 // Update
 message UpdateDiscountRequest {

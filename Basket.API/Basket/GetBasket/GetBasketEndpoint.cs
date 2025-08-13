@@ -6,18 +6,17 @@ namespace Basket.API.Basket.GetBasket
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/Baskets/{id:guid}", async (Guid id, ISender sender) =>
+            app.MapGet("/baskets/{userName}", async (string userName, ISender sender) =>
             {
-                var result = await sender.Send(new GetBasketByIdQuery(id));
+                var result = await sender.Send(new GetBasketByIdQuery(userName));
                 var response = new GetBasketByIdResponse(result.Basket);
-
                 return Results.Ok(response);
             })
-            .WithName("GetBasketById")
+            .WithName("GetBasketByUserName")
             .Produces<GetBasketByIdResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .WithSummary("Get Basket by Id")
-            .WithDescription("Returns the Basket that matches the supplied Guid.");
+            .WithSummary("Get Basket by UserName")
+            .WithDescription("Returns the basket for the specified user.");
         }
     }
 }
