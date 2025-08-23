@@ -42,5 +42,4 @@ var app = builder.Build();
 
 // Configure the HTTP request Pipelines
 app.MapCarter();
-app.UseExceptionHandler(option => {});
 app.Run();

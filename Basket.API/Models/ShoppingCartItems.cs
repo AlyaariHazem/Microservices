@@ -17,6 +17,6 @@
         public int Quantity { get; set; }
 
         /* Calculated helper for convenience */
-        public decimal TotalPrice => UnitPrice * Quantity;
+        public decimal Price { get; set; } = default;
     }
 }

@@ -11,7 +11,7 @@
         public string? CouponCode { get; set; }
 
         /* Convenience aggregate – re-calculated on every get */
-        public decimal TotalPrice => Items.Sum(i => i.TotalPrice);
+        public decimal TotalPrice => Items.Sum(i => i.Price * i.Quantity);
 
         public ShoppingCart() { }
 

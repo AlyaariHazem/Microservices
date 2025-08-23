@@ -23,20 +23,26 @@ namespace Basket.API.Basket.StoreBasket
         (IBasketRepository repository,DiscountProtoService.DiscountProtoServiceClient discountProto)
         : ICommandHandler<StoreBasketCommand, StoreBasketResult>
     {
-        private readonly IBasketRepository _repository;
+        
 
 
         public async Task<StoreBasketResult> Handle(
             StoreBasketCommand command,
             CancellationToken cancellationToken)
         {
-            //TODO: communicate with Discount.Grpc and Calculate latest prices of items in the basket
-
-            // Stroe the basket in database (use Marten upsert - if exist = update, if not exist = insert)
-
-            await _repository.StoreBasket(command.Cart, cancellationToken);
+            await DeductDiscount(command.Cart, cancellationToken);
+            await repository.StoreBasket(command.Cart, cancellationToken);
 
             return new StoreBasketResult(command.Cart.UserName);
+        }
+        public async Task DeductDiscount(ShoppingCart cart, CancellationToken cancellationToken)
+        {
+            foreach (var item in cart.Items)
+            {
+                var coupon = await discountProto.GetDiscountAsync(new GetDiscountRequest { ProductName = item.ProductName });
+                    item.Price -= coupon.Amount;
+                
+            }
         }
     }
 }
