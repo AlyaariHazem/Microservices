@@ -37,7 +37,7 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 });
 //Cross-cutting concerns
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-
+    
 var app = builder.Build();
 
 // Configure the HTTP request Pipelines

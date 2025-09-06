@@ -13,4 +13,13 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Endpoints\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ordering.Application\Ordering.Application.csproj" />
+    <ProjectReference Include="..\Ordering.Infrastracure\Ordering.Infrastracure.csproj" />
+  </ItemGroup>
+
 </Project>
