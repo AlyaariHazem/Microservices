@@ -12,7 +12,6 @@
   <ItemGroup>
     <PackageReference Include="Carter" Version="8.0.0" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
-	  <PackageReference Include="Carter" Version="8.0.0" />
 	  <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Marten" Version="8.3.3" />
@@ -20,6 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
