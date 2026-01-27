@@ -1,5 +1,5 @@
-﻿using Catalog.API.Exception;
-using CatalogAPI.Products.DeleteProduct;
+﻿
+using Catalog.API.Exception;
 
 namespace Catalog.API.Products.GetProductById
 {
@@ -9,9 +9,9 @@ namespace Catalog.API.Products.GetProductById
 
     public record GetProductByIdResult(Product Product);
 
-    public class GetByIdProductCommandValidator : AbstractValidator<DeleteProductCommand>
+    public class GetByIdProductQueryValidator : AbstractValidator<GetProductByIdQuery>
     {
-        public GetByIdProductCommandValidator()
+        public GetByIdProductQueryValidator()
         {
             RuleFor(x => x.Id).NotEmpty().WithMessage("Id Is Required");
         }

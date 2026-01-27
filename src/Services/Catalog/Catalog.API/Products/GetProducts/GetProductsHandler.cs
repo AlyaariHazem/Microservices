@@ -1,5 +1,4 @@
-﻿using Catalog.API.Exception;
-using Marten.Pagination;
+﻿using Marten.Pagination;
 
 namespace Catalog.API.Products.GetProducts
 {

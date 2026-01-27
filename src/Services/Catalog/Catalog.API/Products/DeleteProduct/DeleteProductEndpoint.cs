@@ -1,24 +1,24 @@
-﻿
-namespace CatalogAPI.Products.DeleteProduct
+﻿namespace Catalog.API.Products.DeleteProduct
 {
-    //public record DeleteProductRequset(Guid Id);
     public record DeleteProductResponse(bool IsSuccess);
-    public class DeleteProductEndpoint : CarterModule
+    
+    public class DeleteProductEndpoint : ICarterModule
     {
-        public override void AddRoutes(IEndpointRouteBuilder app)
+        public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("/products/{id}", async (Guid id, ISender sender) =>
+            app.MapDelete("/products/{id:guid}", async (Guid id, ISender sender) =>
             {
                 var result = await sender.Send(new DeleteProductCommand(id));
 
-                var response = result.Adapt<DeleteProductResponse>();
+                var response = new DeleteProductResponse(result.IsSuccess);
                 return Results.Ok(response);
-            }).WithName("DeleteProduct")
-                .Produces<CreateProductResponse>(StatusCodes.Status200OK)
-                .ProducesProblem(StatusCodes.Status400BadRequest)
-                .ProducesProblem(StatusCodes.Status404NotFound)
-                .WithSummary("Delete Product")
-                .WithDescription("Delete Product");
+            })
+            .WithName("DeleteProduct")
+            .Produces<DeleteProductResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithSummary("Delete Product")
+            .WithDescription("Delete a product from the catalog by its ID.");
         }
     }
 }

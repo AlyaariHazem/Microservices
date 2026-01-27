@@ -17,8 +17,8 @@ Start-Process "http://localhost:6001/swagger"
 Write-Host "✓ Opened Basket API Swagger: http://localhost:6001/swagger" -ForegroundColor Cyan
 
 # Open Catalog API Swagger  
-Start-Process "http://localhost:6000/swagger"
-Write-Host "✓ Opened Catalog API Swagger: http://localhost:6000/swagger" -ForegroundColor Cyan
+Start-Process "http://localhost:5000/swagger"
+Write-Host "✓ Opened Catalog API Swagger: http://localhost:5000/swagger" -ForegroundColor Cyan
 
 Write-Host "`nSwagger UIs opened! Docker Compose is running in the background." -ForegroundColor Green
 Write-Host "Press Ctrl+C to stop the services.`n" -ForegroundColor Yellow
