@@ -9,3 +9,6 @@ global using BuildingBlocks.Behaviors;
 global using BuildingBlocks.Exceptions.Handler;
 global using Catalog.API.Data;
 global using Marten.Schema;
+global using BuildingBlocks.Querying.Models;
+global using BuildingBlocks.Querying.Extensions;
+global using BuildingBlocks.Querying.Security;

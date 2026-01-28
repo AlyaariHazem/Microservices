@@ -10,6 +10,7 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 builder.Services.AddValidatorsFromAssembly(assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(BuildingBlocks.Querying.Validation.QueryParametersValidator).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
