@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توثيق نظام الخدمات المصغرة - Microservices</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #fff;
+            direction: rtl;
+            text-align: right;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* Cover Page */
+        .cover-page {
+            text-align: center;
+            padding: 80px 20px;
+            page-break-after: always;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: -40px -40px 40px -40px;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .cover-page h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .cover-page .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .cover-page .info {
+            font-size: 1.1em;
+            margin-top: 60px;
+        }
+        
+        .cover-page .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .cover-page .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        /* Headers */
+        h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            padding-right: 15px;
+            border-right: 4px solid #764ba2;
+        }
+        
+        h3 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        h4 {
+            color: #666;
+            font-size: 1.1em;
+            margin: 15px 0 8px 0;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        tr:hover {
+            background: #f0f2ff;
+        }
+        
+        /* Code blocks */
+        pre, code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #e83e8c;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin: 15px 20px;
+            padding-right: 20px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        /* Boxes */
+        .info-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-right: 5px solid #667eea;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-right: 4px solid #ffc107;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-right: 4px solid #28a745;
+        }
+        
+        /* Architecture Diagram */
+        .diagram {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Consolas', monospace;
+            direction: ltr;
+            text-align: center;
+            white-space: pre;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        
+        /* Service Cards */
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+        
+        .service-card h3 {
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* TOC */
+        .toc {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .toc h2 {
+            border: none;
+            margin-top: 0;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toc li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        /* Page break */
+        .page-break {
+            page-break-after: always;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        /* Emojis as icons */
+        .emoji {
+            font-size: 1.2em;
+            margin-left: 8px;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+            .cover-page {
+                margin: -20px -20px 20px -20px;
+            }
+            .service-card {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover-page">
+    <h1>📚 توثيق نظام الخدمات المصغرة</h1>
+    <div class="subtitle">Microservices Architecture Documentation</div>
+    <div class="badges">
+        <span class="badge">.NET 8</span>
+        <span class="badge">Docker</span>
+        <span class="badge">PostgreSQL</span>
+        <span class="badge">Redis</span>
+        <span class="badge">gRPC</span>
+    </div>
+    <div class="info">
+        <p><strong>المطور:</strong> حازم اليعري</p>
+        <p><strong>التاريخ:</strong> يناير 2026</p>
+        <p><strong>الإصدار:</strong> 1.0</p>
+    </div>
+</div>
+
+<!-- Table of Contents -->
+<div class="toc">
+    <h2>📑 فهرس المحتويات</h2>
+    <ul>
+        <li>1. نظرة عامة على النظام</li>
+        <li>2. البنية المعمارية</li>
+        <li>3. التقنيات المستخدمة</li>
+        <li>4. الخدمات
+            <ul>
+                <li>4.1 خدمة الكتالوج (Catalog Service)</li>
+                <li>4.2 خدمة السلة (Basket Service)</li>
+                <li>4.3 خدمة الخصومات (Discount Service)</li>
+                <li>4.4 خدمة الطلبات (Ordering Service)</li>
+            </ul>
+        </li>
+        <li>5. المكتبات المشتركة (BuildingBlocks)</li>
+        <li>6. قواعد البيانات</li>
+        <li>7. واجهات البرمجة (APIs)</li>
+        <li>8. تشغيل النظام</li>
+        <li>9. أنماط التصميم المستخدمة</li>
+        <li>10. التطويرات المستقبلية</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<!-- Section 1: Overview -->
+<h1><span class="emoji">🎯</span> 1. نظرة عامة على النظام</h1>
+
+<div class="info-box">
+    <h3>الوصف</h3>
+    <p>هذا المشروع هو تطبيق عملي لبنية <strong>الخدمات المصغرة (Microservices)</strong> باستخدام <strong>.NET 8</strong> وأحدث الممارسات في تطوير البرمجيات السحابية. يهدف المشروع إلى بناء نظام تجارة إلكترونية متكامل يتكون من خدمات مستقلة تتواصل فيما بينها.</p>
+</div>
+
+<h2>الأهداف</h2>
+<ul>
+    <li>✅ بناء خدمات مصغرة مستقلة وقابلة للتوسع</li>
+    <li>✅ تطبيق أنماط التصميم الحديثة (CQRS, Clean Architecture, DDD)</li>
+    <li>✅ استخدام تقنيات الاتصال المتنوعة (REST, gRPC)</li>
+    <li>✅ تطبيق مبدأ "قاعدة بيانات لكل خدمة"</li>
+    <li>✅ دعم الحاويات باستخدام Docker</li>
+</ul>
+
+<h2>المميزات الرئيسية</h2>
+<table>
+    <tr>
+        <th>الميزة</th>
+        <th>الوصف</th>
+    </tr>
+    <tr>
+        <td>خدمات مستقلة</td>
+        <td>كل خدمة يمكن نشرها وتوسيعها بشكل منفصل</td>
+    </tr>
+    <tr>
+        <td>أنماط اتصال متعددة</td>
+        <td>REST APIs و gRPC</td>
+    </tr>
+    <tr>
+        <td>قاعدة بيانات لكل خدمة</td>
+        <td>PostgreSQL, Redis, SQLite, SQL Server</td>
+    </tr>
+    <tr>
+        <td>الحاويات</td>
+        <td>دعم كامل لـ Docker و Docker Compose</td>
+    </tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- Section 2: Architecture -->
+<h1><span class="emoji">🏗️</span> 2. البنية المعمارية</h1>
+
+<h2>رسم تخطيطي للنظام</h2>
+<div class="diagram">
+┌─────────────────────────────────────────────────────────────────────┐
+│                         طبقة العملاء                                 │
+│                    ┌─────────────────────┐                           │
+│                    │   تطبيقات العملاء   │                           │
+│                    └─────────┬───────────┘                           │
+└──────────────────────────────┼───────────────────────────────────────┘
+                               │
+┌──────────────────────────────┼───────────────────────────────────────┐
+│                         طبقة الخدمات                                 │
+│      ┌───────────────┬───────┴───────┬───────────────┐               │
+│      │               │               │               │               │
+│      ▼               ▼               ▼               ▼               │
+│ ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────────┐         │
+│ │ Catalog │    │ Basket  │    │Ordering │    │  Discount   │         │
+│ │   API   │    │   API   │    │   API   │    │   (gRPC)    │         │
+│ │ REST    │    │ REST    │    │  REST   │    │             │         │
+│ └────┬────┘    └────┬────┘    └────┬────┘    └──────┬──────┘         │
+│      │              │              │                │                │
+└──────┼──────────────┼──────────────┼────────────────┼────────────────┘
+       │              │              │                │
+┌──────┼──────────────┼──────────────┼────────────────┼────────────────┐
+│      │         طبقة البيانات        │                │                │
+│      ▼              ▼              ▼                ▼                │
+│ ┌─────────┐  ┌───────────────┐ ┌─────────┐    ┌─────────┐            │
+│ │PostgreSQL│ │ PostgreSQL   │ │SQL Server│   │ SQLite  │            │
+│ │CatalogDB │ │ + Redis      │ │ OrderDB  │   │DiscountDB│           │
+│ └─────────┘  └───────────────┘ └─────────┘    └─────────┘            │
+└──────────────────────────────────────────────────────────────────────┘
+</div>
+
+<h2>مبادئ البنية</h2>
+<table>
+    <tr>
+        <th>المبدأ</th>
+        <th>الوصف</th>
+    </tr>
+    <tr>
+        <td>الاستقلالية</td>
+        <td>كل خدمة تعمل بشكل مستقل ويمكن نشرها منفردة</td>
+    </tr>
+    <tr>
+        <td>قاعدة بيانات منفصلة</td>
+        <td>كل خدمة لها قاعدة بياناتها الخاصة</td>
+    </tr>
+    <tr>
+        <td>الاتصال عبر APIs</td>
+        <td>REST للعملاء، gRPC للاتصال بين الخدمات</td>
+    </tr>
+    <tr>
+        <td>الحاويات</td>
+        <td>جميع الخدمات معبأة في حاويات Docker</td>
+    </tr>
+</table>
+
+<h2>أنماط الاتصال</h2>
+<table>
+    <tr>
+        <th>النوع</th>
+        <th>الاستخدام</th>
+        <th>المثال</th>
+    </tr>
+    <tr>
+        <td><strong>REST</strong></td>
+        <td>اتصال العملاء بالخدمات</td>
+        <td>Catalog API, Basket API</td>
+    </tr>
+    <tr>
+        <td><strong>gRPC</strong></td>
+        <td>اتصال الخدمات ببعضها</td>
+        <td>Basket → Discount</td>
+    </tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- Section 3: Technologies -->
+<h1><span class="emoji">🛠️</span> 3. التقنيات المستخدمة</h1>
+
+<h2>إطار العمل الأساسي</h2>
+<table>
+    <tr>
+        <th>التقنية</th>
+        <th>الإصدار</th>
+        <th>الاستخدام</th>
+    </tr>
+    <tr>
+        <td>.NET</td>
+        <td>8.0</td>
+        <td>إطار العمل الأساسي</td>
+    </tr>
+    <tr>
+        <td>ASP.NET Core</td>
+        <td>8.0</td>
+        <td>بناء APIs</td>
+    </tr>
+    <tr>
+        <td>Carter</td>
+        <td>-</td>
+        <td>توجيه Minimal APIs</td>
+    </tr>
+    <tr>
+        <td>MediatR</td>
+        <td>-</td>
+        <td>تطبيق نمط CQRS</td>
+    </tr>
+    <tr>
+        <td>FluentValidation</td>
+        <td>-</td>
+        <td>التحقق من المدخلات</td>
+    </tr>
+    <tr>
+        <td>Mapster</td>
+        <td>-</td>
+        <td>تحويل الكائنات</td>
+    </tr>
+</table>
+
+<h2>قواعد البيانات</h2>
+<table>
+    <tr>
+        <th>قاعدة البيانات</th>
+        <th>الاستخدام</th>
+    </tr>
+    <tr>
+        <td>PostgreSQL</td>
+        <td>الكتالوج والسلة</td>
+    </tr>
+    <tr>
+        <td>Marten</td>
+        <td>مستندات وأحداث على PostgreSQL</td>
+    </tr>
+    <tr>
+        <td>Redis</td>
+        <td>التخزين المؤقت الموزع</td>
+    </tr>
+    <tr>
+        <td>SQLite</td>
+        <td>خدمة الخصومات</td>
+    </tr>
+    <tr>
+        <td>SQL Server</td>
+        <td>خدمة الطلبات</td>
+    </tr>
+</table>
+
+<h2>البنية التحتية</h2>
+<table>
+    <tr>
+        <th>التقنية</th>
+        <th>الاستخدام</th>
+    </tr>
+    <tr>
+        <td>Docker</td>
+        <td>حاويات التطبيق</td>
+    </tr>
+    <tr>
+        <td>Docker Compose</td>
+        <td>تنسيق الحاويات المتعددة</td>
+    </tr>
+    <tr>
+        <td>gRPC</td>
+        <td>اتصال عالي الأداء بين الخدمات</td>
+    </tr>
+    <tr>
+        <td>Protobuf</td>
+        <td>تسلسل البيانات لـ gRPC</td>
+    </tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- Section 4: Services -->
+<h1><span class="emoji">📦</span> 4. الخدمات</h1>
+
+<!-- Catalog Service -->
+<div class="service-card">
+    <h3><span class="emoji">🛍️</span> 4.1 خدمة الكتالوج (Catalog Service)</h3>
+    
+    <h4>الوصف</h4>
+    <p>خدمة إدارة المنتجات والكتالوج، تتيح إضافة وتعديل وحذف واستعراض المنتجات.</p>
+    
+    <h4>التقنيات</h4>
+    <ul>
+        <li><strong>Carter</strong> للتوجيه</li>
+        <li><strong>Marten</strong> لقاعدة البيانات المستندية</li>
+        <li><strong>PostgreSQL</strong> للتخزين</li>
+        <li><strong>MediatR</strong> لنمط CQRS</li>
+        <li><strong>FluentValidation</strong> للتحقق</li>
+    </ul>
+    
+    <h4>المنافذ</h4>
+    <table>
+        <tr>
+            <th>المنفذ</th>
+            <th>البروتوكول</th>
+        </tr>
+        <tr>
+            <td>5000</td>
+            <td>HTTP</td>
+        </tr>
+        <tr>
+            <td>5050</td>
+            <td>HTTPS</td>
+        </tr>
+    </table>
+    
+    <h4>نموذج البيانات</h4>
+    <pre><code>المنتج (Product)
+├── Id (UUID) - المعرف الفريد
+├── Name (string) - اسم المنتج
+├── Category (list) - التصنيفات
+├── Description (string) - الوصف
+├── ImageFile (string) - صورة المنتج
+└── Price (decimal) - السعر</code></pre>
+    
+    <h4>نقاط النهاية (Endpoints)</h4>
+    <table>
+        <tr>
+            <th>الطريقة</th>
+            <th>المسار</th>
+            <th>الوصف</th>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/products</td>
+            <td>عرض جميع المنتجات</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/products/{id}</td>
+            <td>عرض منتج محدد</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/products/category/{category}</td>
+            <td>عرض منتجات تصنيف معين</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/products</td>
+            <td>إضافة منتج جديد</td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/products</td>
+            <td>تعديل منتج</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/products/{id}</td>
+            <td>حذف منتج</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Basket Service -->
+<div class="service-card">
+    <h3><span class="emoji">🛒</span> 4.2 خدمة السلة (Basket Service)</h3>
+    
+    <h4>الوصف</h4>
+    <p>خدمة إدارة سلة التسوق، تتيح للمستخدمين إضافة المنتجات للسلة وتطبيق الخصومات.</p>
+    
+    <h4>التقنيات</h4>
+    <ul>
+        <li><strong>Carter</strong> للتوجيه</li>
+        <li><strong>PostgreSQL</strong> للتخزين</li>
+        <li><strong>Redis</strong> للتخزين المؤقت</li>
+        <li><strong>gRPC Client</strong> للاتصال بخدمة الخصومات</li>
+        <li><strong>MediatR</strong> لنمط CQRS</li>
+    </ul>
+    
+    <h4>المنافذ</h4>
+    <table>
+        <tr>
+            <th>المنفذ</th>
+            <th>البروتوكول</th>
+        </tr>
+        <tr>
+            <td>6001</td>
+            <td>HTTP</td>
+        </tr>
+        <tr>
+            <td>6061</td>
+            <td>HTTPS</td>
+        </tr>
+    </table>
+    
+    <h4>نموذج البيانات</h4>
+    <pre><code>سلة التسوق (ShoppingCart)
+├── UserName (string) - اسم المستخدم
+├── Items (list) - عناصر السلة
+│   ├── Quantity (int) - الكمية
+│   ├── Color (string) - اللون
+│   ├── Price (decimal) - السعر
+│   ├── ProductId (UUID) - معرف المنتج
+│   └── ProductName (string) - اسم المنتج
+└── TotalPrice (decimal) - السعر الإجمالي</code></pre>
+    
+    <h4>نقاط النهاية (Endpoints)</h4>
+    <table>
+        <tr>
+            <th>الطريقة</th>
+            <th>المسار</th>
+            <th>الوصف</th>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/basket/{username}</td>
+            <td>عرض سلة المستخدم</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/basket</td>
+            <td>إنشاء/تحديث السلة</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/basket/{username}</td>
+            <td>حذف السلة</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/basket/checkout</td>
+            <td>إتمام الشراء</td>
+        </tr>
+    </table>
+    
+    <div class="info-box">
+        <strong>التكاملات:</strong> تستدعي خدمة الخصومات عبر gRPC للحصول على الخصومات
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- Discount Service -->
+<div class="service-card">
+    <h3><span class="emoji">💰</span> 4.3 خدمة الخصومات (Discount Service)</h3>
+    
+    <h4>الوصف</h4>
+    <p>خدمة إدارة الخصومات والكوبونات، توفر معلومات الخصومات للخدمات الأخرى عبر بروتوكول gRPC.</p>
+    
+    <h4>التقنيات</h4>
+    <ul>
+        <li><strong>gRPC Server</strong> للاتصال</li>
+        <li><strong>SQLite</strong> للتخزين خفيف الوزن</li>
+        <li><strong>Entity Framework Core</strong> للوصول للبيانات</li>
+        <li><strong>Protobuf</strong> لتعريف العقود</li>
+    </ul>
+    
+    <h4>المنافذ</h4>
+    <table>
+        <tr>
+            <th>المنفذ</th>
+            <th>البروتوكول</th>
+        </tr>
+        <tr>
+            <td>6002</td>
+            <td>HTTP/gRPC</td>
+        </tr>
+        <tr>
+            <td>6062</td>
+            <td>HTTPS/gRPC</td>
+        </tr>
+    </table>
+    
+    <h4>نموذج البيانات</h4>
+    <pre><code>الكوبون (Coupon)
+├── Id (int) - المعرف
+├── ProductName (string) - اسم المنتج
+├── Description (string) - الوصف
+└── Amount (int) - قيمة الخصم</code></pre>
+    
+    <h4>طرق gRPC</h4>
+    <table>
+        <tr>
+            <th>الطريقة</th>
+            <th>الوصف</th>
+        </tr>
+        <tr>
+            <td>GetAllDiscounts()</td>
+            <td>عرض جميع الخصومات</td>
+        </tr>
+        <tr>
+            <td>GetDiscount(productName)</td>
+            <td>عرض خصم منتج معين</td>
+        </tr>
+        <tr>
+            <td>CreateDiscount(coupon)</td>
+            <td>إنشاء خصم جديد</td>
+        </tr>
+        <tr>
+            <td>UpdateDiscount(coupon)</td>
+            <td>تحديث خصم</td>
+        </tr>
+        <tr>
+            <td>DeleteDiscount(productName)</td>
+            <td>حذف خصم</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Ordering Service -->
+<div class="service-card">
+    <h3><span class="emoji">📋</span> 4.4 خدمة الطلبات (Ordering Service)</h3>
+    
+    <h4>الوصف</h4>
+    <p>خدمة معالجة الطلبات باستخدام مبادئ <strong>Clean Architecture</strong> و <strong>Domain-Driven Design (DDD)</strong>.</p>
+    
+    <h4>التقنيات</h4>
+    <ul>
+        <li><strong>Clean Architecture</strong> (الهندسة النظيفة)</li>
+        <li><strong>MediatR</strong> لنمط CQRS</li>
+        <li><strong>Entity Framework Core</strong></li>
+        <li><strong>Domain-Driven Design</strong> (التصميم المبني على النطاق)</li>
+    </ul>
+    
+    <h4>طبقات الخدمة</h4>
+    <pre><code>Ordering Service
+├── Ordering.API           → نقاط النهاية والمتحكمات
+├── Ordering.Application   → حالات الاستخدام (CQRS)
+├── Ordering.Domain        → نماذج النطاق والتجميعات
+└── Ordering.Infrastructure → الوصول للبيانات</code></pre>
+    
+    <h4>نموذج النطاق (Domain Model)</h4>
+    <pre><code>الطلب (Order) - جذر التجميع
+├── OrderId - معرف الطلب
+├── CustomerId - معرف العميل
+├── OrderDate - تاريخ الطلب
+├── Status - حالة الطلب
+├── Items - عناصر الطلب
+│   ├── ProductId - معرف المنتج
+│   ├── ProductName - اسم المنتج
+│   ├── Quantity - الكمية
+│   ├── UnitPrice - سعر الوحدة
+│   └── TotalPrice - السعر الإجمالي
+└── TotalAmount - المبلغ الإجمالي</code></pre>
+    
+    <div class="warning-box">
+        <strong>⚠️ ملاحظة:</strong> هذه الخدمة قيد التطوير، البنية جاهزة لكن نقاط النهاية لم تُفعَّل بعد.
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- Section 5: BuildingBlocks -->
+<h1><span class="emoji">🧱</span> 5. المكتبات المشتركة (BuildingBlocks)</h1>
+
+<div class="info-box">
+    <h3>الوصف</h3>
+    <p>مكتبة مشتركة تحتوي على المكونات القابلة لإعادة الاستخدام بين الخدمات.</p>
+</div>
+
+<h2>المكونات</h2>
+<table>
+    <tr>
+        <th>المكون</th>
+        <th>الوصف</th>
+    </tr>
+    <tr>
+        <td>ICommand / IQuery</td>
+        <td>واجهات CQRS</td>
+    </tr>
+    <tr>
+        <td>Pipeline Behaviors</td>
+        <td>سلوكيات MediatR</td>
+    </tr>
+    <tr>
+        <td>Validation Behaviors</td>
+        <td>التحقق التلقائي</td>
+    </tr>
+    <tr>
+        <td>Custom Exceptions</td>
+        <td>استثناءات مخصصة</td>
+    </tr>
+</table>
+
+<h2>هيكل المكتبة</h2>
+<pre><code>BuildingBlocks/
+├── CQRS/
+│   ├── ICommand.cs
+│   ├── ICommandHandler.cs
+│   ├── IQuery.cs
+│   └── IQueryHandler.cs
+├── Behaviors/
+│   ├── ValidationBehavior.cs
+│   └── LoggingBehavior.cs
+└── Exceptions/
+    ├── NotFoundException.cs
+    └── BadRequestException.cs</code></pre>
+
+<div class="page-break"></div>
+
+<!-- Section 6: Databases -->
+<h1><span class="emoji">🗄️</span> 6. قواعد البيانات</h1>
+
+<h2>جدول ملخص</h2>
+<table>
+    <tr>
+        <th>الخدمة</th>
+        <th>قاعدة البيانات</th>
+        <th>المنفذ</th>
+        <th>الاستخدام</th>
+    </tr>
+    <tr>
+        <td>Catalog</td>
+        <td>PostgreSQL</td>
+        <td>5432</td>
+        <td>تخزين المنتجات</td>
+    </tr>
+    <tr>
+        <td>Basket</td>
+        <td>PostgreSQL</td>
+        <td>5433</td>
+        <td>تخزين السلات</td>
+    </tr>
+    <tr>
+        <td>Basket</td>
+        <td>Redis</td>
+        <td>6379</td>
+        <td>التخزين المؤقت</td>
+    </tr>
+    <tr>
+        <td>Discount</td>
+        <td>SQLite</td>
+        <td>-</td>
+        <td>تخزين الخصومات</td>
+    </tr>
+    <tr>
+        <td>Ordering</td>
+        <td>SQL Server</td>
+        <td>-</td>
+        <td>تخزين الطلبات</td>
+    </tr>
+</table>
+
+<h2>بيانات الاتصال</h2>
+
+<h3>PostgreSQL - Catalog</h3>
+<pre><code>Host: localhost
+Port: 5432
+Database: CatalogDb
+User: postgres
+Password: postgres</code></pre>
+
+<h3>PostgreSQL - Basket</h3>
+<pre><code>Host: localhost
+Port: 5433
+Database: BasketDb
+User: postgres
+Password: postgres</code></pre>
+
+<h3>Redis</h3>
+<pre><code>Host: localhost
+Port: 6379</code></pre>
+
+<div class="page-break"></div>
+
+<!-- Section 7: APIs -->
+<h1><span class="emoji">🔌</span> 7. واجهات البرمجة (APIs)</h1>
+
+<h2>الوصول لـ Swagger</h2>
+<table>
+    <tr>
+        <th>الخدمة</th>
+        <th>الرابط</th>
+    </tr>
+    <tr>
+        <td>Catalog API</td>
+        <td>http://localhost:5000/swagger</td>
+    </tr>
+    <tr>
+        <td>Basket API</td>
+        <td>http://localhost:6001/swagger</td>
+    </tr>
+</table>
+
+<h2>ملخص جميع نقاط النهاية</h2>
+
+<h3>Catalog API</h3>
+<pre><code>GET    /products                    # عرض جميع المنتجات
+GET    /products/{id}               # عرض منتج محدد
+GET    /products/category/{category} # منتجات تصنيف معين
+POST   /products                    # إضافة منتج
+PUT    /products                    # تعديل منتج
+DELETE /products/{id}               # حذف منتج</code></pre>
+
+<h3>Basket API</h3>
+<pre><code>GET    /basket/{username}           # عرض سلة المستخدم
+POST   /basket                      # إنشاء/تحديث السلة
+DELETE /basket/{username}           # حذف السلة
+POST   /basket/checkout             # إتمام الشراء</code></pre>
+
+<h3>Discount gRPC</h3>
+<pre><code>service DiscountProtoService {
+  rpc GetAllDiscounts (GetAllDiscountsRequest) returns (CouponsModel);
+  rpc GetDiscount (GetDiscountRequest) returns (CouponModel);
+  rpc CreateDiscount (CreateDiscountRequest) returns (CouponModel);
+  rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+  rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}</code></pre>
+
+<h2>مثال على استخدام الـ APIs</h2>
+
+<h3>إضافة منتج جديد (Catalog API)</h3>
+<pre><code>POST /products
+Content-Type: application/json
+
+{
+  "name": "iPhone 14",
+  "category": ["Electronics", "Smartphones"],
+  "description": "أحدث هاتف من آبل",
+  "imageFile": "iphone14.png",
+  "price": 999.99
+}</code></pre>
+
+<h3>إنشاء سلة (Basket API)</h3>
+<pre><code>POST /basket
+Content-Type: application/json
+
+{
+  "userName": "hazem_user",
+  "items": [
+    {
+      "quantity": 2,
+      "color": "أسود",
+      "price": 999.99,
+      "productId": "5334c996-8457-4cf0-815c-ed2b77c4ff61",
+      "productName": "iPhone 14"
+    }
+  ]
+}</code></pre>
+
+<div class="page-break"></div>
+
+<!-- Section 8: Running -->
+<h1><span class="emoji">🚀</span> 8. تشغيل النظام</h1>
+
+<h2>المتطلبات الأساسية</h2>
+<table>
+    <tr>
+        <th>البرنامج</th>
+        <th>الإصدار</th>
+        <th>رابط التحميل</th>
+    </tr>
+    <tr>
+        <td>.NET SDK</td>
+        <td>8.0+</td>
+        <td>dotnet.microsoft.com</td>
+    </tr>
+    <tr>
+        <td>Docker Desktop</td>
+        <td>أحدث إصدار</td>
+        <td>docker.com</td>
+    </tr>
+    <tr>
+        <td>Git</td>
+        <td>أحدث إصدار</td>
+        <td>git-scm.com</td>
+    </tr>
+</table>
+
+<h2>التشغيل باستخدام Docker (موصى به)</h2>
+<pre><code># 1. استنساخ المستودع
+git clone https://github.com/AlyaariHazem/Microservices.git
+cd Microservices
+
+# 2. بناء وتشغيل جميع الحاويات
+docker-compose up -d
+
+# 3. عرض السجلات
+docker-compose logs -f
+
+# 4. إيقاف الحاويات
+docker-compose down</code></pre>
+
+<h2>التشغيل اليدوي</h2>
+<pre><code># تشغيل Catalog API
+cd src/Services/Catalog/Catalog.API
+dotnet run
+
+# تشغيل Basket API (في نافذة جديدة)
+cd Basket.API
+dotnet run
+
+# تشغيل Discount gRPC (في نافذة جديدة)
+cd src/Services/Discount/Discount.Grpc
+dotnet run</code></pre>
+
+<h2>حاويات Docker</h2>
+<table>
+    <tr>
+        <th>الخدمة</th>
+        <th>الحاوية</th>
+        <th>المنافذ</th>
+    </tr>
+    <tr>
+        <td>catalog.api</td>
+        <td>catalogapi</td>
+        <td>5000, 5050</td>
+    </tr>
+    <tr>
+        <td>basket.api</td>
+        <td>basketapi</td>
+        <td>6001, 6061</td>
+    </tr>
+    <tr>
+        <td>discount.grpc</td>
+        <td>discountgrpc</td>
+        <td>6002, 6062</td>
+    </tr>
+    <tr>
+        <td>catalogdb</td>
+        <td>catalogdb</td>
+        <td>5432</td>
+    </tr>
+    <tr>
+        <td>basketdb</td>
+        <td>basketdb</td>
+        <td>5433</td>
+    </tr>
+    <tr>
+        <td>distributedcache</td>
+        <td>distributedcache</td>
+        <td>6379</td>
+    </tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- Section 9: Design Patterns -->
+<h1><span class="emoji">🎨</span> 9. أنماط التصميم المستخدمة</h1>
+
+<h2>9.1 CQRS (فصل مسؤولية الأوامر والاستعلامات)</h2>
+<pre><code>CQRS Pattern
+├── Commands (الأوامر)
+│   ├── CreateProductCommand
+│   ├── UpdateProductCommand
+│   └── DeleteProductCommand
+└── Queries (الاستعلامات)
+    ├── GetProductsQuery
+    └── GetProductByIdQuery</code></pre>
+
+<div class="success-box">
+    <strong>الفوائد:</strong>
+    <ul>
+        <li>فصل عمليات القراءة عن الكتابة</li>
+        <li>تحسين الأداء</li>
+        <li>سهولة التوسع</li>
+    </ul>
+</div>
+
+<h2>9.2 Repository Pattern (نمط المستودع)</h2>
+<div class="success-box">
+    <strong>الفوائد:</strong>
+    <ul>
+        <li>عزل طبقة الوصول للبيانات</li>
+        <li>سهولة الاختبار</li>
+        <li>مرونة تغيير قاعدة البيانات</li>
+    </ul>
+</div>
+
+<h2>9.3 Clean Architecture (الهندسة النظيفة)</h2>
+<pre><code>الهندسة النظيفة
+├── Domain Layer (طبقة النطاق)
+│   └── الكيانات والمنطق الأساسي
+├── Application Layer (طبقة التطبيق)
+│   └── حالات الاستخدام والمعالجات
+├── Infrastructure Layer (طبقة البنية التحتية)
+│   └── الوصول للبيانات والخدمات الخارجية
+└── API Layer (طبقة الواجهة)
+    └── نقاط النهاية والمتحكمات</code></pre>
+
+<h2>9.4 Domain-Driven Design (التصميم المبني على النطاق)</h2>
+<table>
+    <tr>
+        <th>المفهوم</th>
+        <th>الوصف</th>
+    </tr>
+    <tr>
+        <td>Aggregate Root</td>
+        <td>جذر التجميع</td>
+    </tr>
+    <tr>
+        <td>Entity</td>
+        <td>الكيان</td>
+    </tr>
+    <tr>
+        <td>Value Object</td>
+        <td>كائن القيمة</td>
+    </tr>
+    <tr>
+        <td>Domain Event</td>
+        <td>حدث النطاق</td>
+    </tr>
+</table>
+
+<h2>9.5 Database per Service (قاعدة بيانات لكل خدمة)</h2>
+<div class="success-box">
+    <strong>الفوائد:</strong>
+    <ul>
+        <li>استقلالية الخدمات</li>
+        <li>حرية اختيار التقنية المناسبة</li>
+        <li>سهولة التوسع</li>
+    </ul>
+</div>
+
+<h2>9.6 Event Sourcing (إعادة بناء الحالة من الأحداث)</h2>
+<ul>
+    <li>مُطبَّق في خدمة الكتالوج باستخدام <strong>Marten</strong></li>
+    <li>تخزين جميع التغييرات كأحداث</li>
+    <li>إمكانية الرجوع لأي نقطة زمنية</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- Section 10: Future -->
+<h1><span class="emoji">🔮</span> 10. التطويرات المستقبلية</h1>
+
+<h2>قيد التطوير 🚧</h2>
+<table>
+    <tr>
+        <th>الميزة</th>
+        <th>الوصف</th>
+        <th>الأولوية</th>
+    </tr>
+    <tr>
+        <td>إكمال Ordering</td>
+        <td>تفعيل نقاط النهاية</td>
+        <td>🔴 عالية</td>
+    </tr>
+    <tr>
+        <td>الاختبارات</td>
+        <td>إضافة Unit و Integration Tests</td>
+        <td>🔴 عالية</td>
+    </tr>
+    <tr>
+        <td>Async Messaging</td>
+        <td>RabbitMQ للرسائل غير المتزامنة</td>
+        <td>🔴 عالية</td>
+    </tr>
+</table>
+
+<h2>مخطط للمستقبل 📋</h2>
+<table>
+    <tr>
+        <th>الميزة</th>
+        <th>الوصف</th>
+        <th>الأولوية</th>
+    </tr>
+    <tr>
+        <td>API Gateway</td>
+        <td>بوابة موحدة (Ocelot/YARP)</td>
+        <td>🟡 متوسطة</td>
+    </tr>
+    <tr>
+        <td>Service Discovery</td>
+        <td>اكتشاف الخدمات (Consul)</td>
+        <td>🟡 متوسطة</td>
+    </tr>
+    <tr>
+        <td>CI/CD</td>
+        <td>GitHub Actions</td>
+        <td>🟡 متوسطة</td>
+    </tr>
+    <tr>
+        <td>Observability</td>
+        <td>Serilog + OpenTelemetry</td>
+        <td>🟡 متوسطة</td>
+    </tr>
+    <tr>
+        <td>Health Checks</td>
+        <td>فحوصات الصحة</td>
+        <td>🟢 منخفضة</td>
+    </tr>
+    <tr>
+        <td>Rate Limiting</td>
+        <td>تحديد المعدل</td>
+        <td>🟢 منخفضة</td>
+    </tr>
+</table>
+
+<h2>التحسينات المقترحة</h2>
+
+<h3>1. المرونة والتحمل</h3>
+<ul>
+    <li>تطبيق Circuit Breaker باستخدام Polly</li>
+    <li>سياسات إعادة المحاولة</li>
+    <li>عزل الأخطاء</li>
+</ul>
+
+<h3>2. المراقبة</h3>
+<ul>
+    <li>Prometheus + Grafana للمقاييس</li>
+    <li>Jaeger للتتبع الموزع</li>
+    <li>ELK Stack للسجلات</li>
+</ul>
+
+<h3>3. الأمان</h3>
+<ul>
+    <li>مصادقة JWT</li>
+    <li>تحديد المعدل</li>
+    <li>HTTPS إلزامي</li>
+</ul>
+
+<!-- Footer -->
+<div class="footer">
+    <h2>📞 معلومات الاتصال</h2>
+    <p><strong>المطور:</strong> حازم اليعري</p>
+    <p><strong>GitHub:</strong> @AlyaariHazem</p>
+    <p><strong>المشروع:</strong> github.com/AlyaariHazem/Microservices</p>
+    <br>
+    <p>⭐ إذا أعجبك المشروع، لا تنسَ إضافة نجمة على GitHub!</p>
+    <p><em>تم إعداد هذا التوثيق في يناير 2026</em></p>
+</div>
+
+</body>
+</html>
